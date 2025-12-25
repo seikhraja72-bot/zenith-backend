@@ -5,7 +5,6 @@ import os
 
 app = FastAPI()
 
-# CORS bypass for frontend connection
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["*"],
@@ -13,9 +12,12 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# Latest Advance Model Configuration
-genai.configure(api_key=os.environ.get("GEMINI_API_KEY"))
-model = genai.GenerativeModel('gemini-1.5-flash') # Sabse stable version
+# Latest API setup
+api_key = os.environ.get("GEMINI_API_KEY")
+genai.configure(api_key=api_key)
+
+# Sabse Advance aur Latest Model
+model = genai.GenerativeModel('gemini-1.5-flash-8b')
 
 @app.get("/")
 def home():
@@ -24,9 +26,11 @@ def home():
 @app.get("/chat")
 def chat(prompt: str):
     try:
-        # Latest method for content generation
+        if not prompt:
+            return {"error": "Prompt is empty"}
+        # Latest generation logic
         response = model.generate_content(prompt)
         return {"reply": response.text}
     except Exception as e:
-        return {"error": "API Key issue or Model busy. Please check Render Environment Variables."}
+        return {"error": f"Error: {str(e)}"}
 
