@@ -5,6 +5,7 @@ import os
 
 app = FastAPI()
 
+# CORS bypass for frontend connection
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["*"],
@@ -12,11 +13,9 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# Latest API Key configuration
+# Latest Advance Model Configuration
 genai.configure(api_key=os.environ.get("GEMINI_API_KEY"))
-
-# Latest Model name use kar rahe hain
-model = genai.GenerativeModel('gemini-1.5-flash')
+model = genai.GenerativeModel('gemini-1.5-flash') # Sabse stable version
 
 @app.get("/")
 def home():
@@ -25,10 +24,9 @@ def home():
 @app.get("/chat")
 def chat(prompt: str):
     try:
-        # Latest generation method
+        # Latest method for content generation
         response = model.generate_content(prompt)
         return {"reply": response.text}
     except Exception as e:
-        return {"error": str(e)}
-
+        return {"error": "API Key issue or Model busy. Please check Render Environment Variables."}
 
