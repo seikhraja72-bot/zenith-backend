@@ -15,9 +15,8 @@ app.add_middleware(
 # API Configuration
 genai.configure(api_key=os.environ.get("GEMINI_API_KEY"))
 
-# Naya Model Path (Isse 404 nahi aayega)
-model = genai.GenerativeModel(model_name="models/gemini-1.5-flash")
-
+# Sahi Model Initialization (Iss line se error theek ho jayegi)
+model = genai.GenerativeModel("gemini-1.5-flash")
 
 @app.get("/")
 def home():
@@ -26,8 +25,10 @@ def home():
 @app.get("/chat")
 def chat(prompt: str):
     try:
+        # Prompt ko model ke paas bhejna
         response = model.generate_content(prompt)
         return {"reply": response.text}
     except Exception as e:
+        # Agar koi error aaye to wo yahan dikhega
         return {"error": str(e)}
 
