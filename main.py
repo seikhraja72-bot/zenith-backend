@@ -1,16 +1,24 @@
 from fastapi import FastAPI
+from fastapi.middleware.cors import CORSMiddleware
 import google.generativeai as genai
 import os
 
 app = FastAPI()
 
-# Cloud Environment se API Key uthayega
+# --- CORS SETTINGS (YE ZAROORI HAI) ---
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],  # Isse aapka frontend baat kar payega
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
 genai.configure(api_key=os.environ.get("GEMINI_API_KEY"))
 model = genai.GenerativeModel('gemini-1.5-flash')
 
 @app.get("/")
 def home():
-    return {"status": "Zenith AI Cloud is Active", "owner": "Shaikh Raja"}
+    return {"status": "Zenith AI Cloud is Active"}
 
 @app.get("/chat")
 def chat(prompt: str):
@@ -19,3 +27,4 @@ def chat(prompt: str):
         return {"reply": response.text}
     except Exception as e:
         return {"error": str(e)}
+
