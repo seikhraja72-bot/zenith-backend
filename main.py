@@ -16,7 +16,8 @@ app.add_middleware(
 genai.configure(api_key=os.environ.get("GEMINI_API_KEY"))
 
 # Naya Model Path (Isse 404 nahi aayega)
-model = genai.GenerativeModel('models/gemini-1.5-flash')
+model = genai.GenerativeModel(model_name="models/gemini-1.5-flash")
+
 
 @app.get("/")
 def home():
