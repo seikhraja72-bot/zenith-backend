@@ -12,12 +12,11 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# API Key setup
-api_key = os.environ.get("GEMINI_API_KEY")
-genai.configure(api_key=api_key)
+# API Configuration
+genai.configure(api_key=os.environ.get("GEMINI_API_KEY"))
 
-# SABSE STABLE MODEL NAME (Isse 404 nahi aayega)
-model = genai.GenerativeModel('gemini-1.5-flash')
+# Naya Model Path (Isse 404 nahi aayega)
+model = genai.GenerativeModel('models/gemini-1.5-flash')
 
 @app.get("/")
 def home():
@@ -26,7 +25,6 @@ def home():
 @app.get("/chat")
 def chat(prompt: str):
     try:
-        # Simple and direct content generation
         response = model.generate_content(prompt)
         return {"reply": response.text}
     except Exception as e:
